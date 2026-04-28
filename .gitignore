@@ -1,0 +1,32 @@
+# ================================================================
+# .gitignore — keep build output and local secrets out of git.
+# Build folders are recreated on every `dotnet build`, so we never
+# commit them. The SQLite database is created at runtime, so we
+# ignore it too — the app re-applies migrations on startup.
+# ================================================================
+
+# Build output
+bin/
+obj/
+
+# Visual Studio / Rider local files
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Runtime SQLite DB (created by EF Core on first run)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Logs
+*.log
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Local secrets — copy .env.example to .env and fill in your NASA key
+.env

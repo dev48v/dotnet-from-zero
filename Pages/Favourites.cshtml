@@ -1,0 +1,51 @@
+@*
+    STEP 7 — Favourites list. Each card has a delete button which
+    posts back to OnPostDeleteAsync.
+*@
+@page
+@model FavouritesModel
+@{
+    ViewData["Title"] = "Favourites";
+}
+
+<section class="hero">
+    <h1>My Favourites</h1>
+    <p class="hero-sub">@Model.Items.Count saved · stored in SQLite</p>
+</section>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="empty-state">
+        <p>No favourites yet. Hit <a asp-page="/Index">Today</a> and save your first APOD.</p>
+    </div>
+}
+else
+{
+    <div class="grid">
+        @foreach (var fav in Model.Items)
+        {
+            <div class="grid-item">
+                <a asp-page="/Index" asp-route-date="@fav.Date" title="@fav.Title">
+                    @if (fav.MediaType == "video")
+                    {
+                        <div class="grid-thumb video-thumb">▶ Video</div>
+                    }
+                    else
+                    {
+                        <img src="@fav.Url" alt="@fav.Title" loading="lazy" />
+                    }
+                </a>
+                <div class="grid-meta">
+                    <span class="grid-title">@fav.Title</span>
+                    <span class="grid-date">
+                        @fav.Date · saved @fav.SavedAt.ToString("yyyy-MM-dd HH:mm") UTC
+                    </span>
+                    <form method="post" asp-page-handler="Delete">
+                        <input type="hidden" name="id" value="@fav.Id" />
+                        <button type="submit" class="btn-danger">Remove</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+}

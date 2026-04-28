@@ -1,0 +1,55 @@
+@*
+    STEP 7 — Date range browser.
+    Two date pickers + grid of results. Falls back to last 7 days.
+*@
+@page
+@model HistoryModel
+@{
+    ViewData["Title"] = "History";
+}
+
+<section class="hero">
+    <h1>Browse by Date Range</h1>
+    <p class="hero-sub">Up to 30 days at a time.</p>
+
+    <form method="get" class="date-form">
+        <label for="start">Start</label>
+        <input type="date" id="start" name="start"
+               min="1995-06-16"
+               max="@DateTime.UtcNow.ToString("yyyy-MM-dd")"
+               value="@Model.EffectiveStart.ToString("yyyy-MM-dd")" />
+
+        <label for="end">End</label>
+        <input type="date" id="end" name="end"
+               min="1995-06-16"
+               max="@DateTime.UtcNow.ToString("yyyy-MM-dd")"
+               value="@Model.EffectiveEnd.ToString("yyyy-MM-dd")" />
+
+        <button type="submit" class="btn-primary">Browse</button>
+    </form>
+</section>
+
+@if (Model.ErrorMessage is not null)
+{
+    <div class="alert alert-error">@Model.ErrorMessage</div>
+}
+
+<div class="grid">
+    @foreach (var pic in Model.Pictures)
+    {
+        <a class="grid-item" asp-page="/Index" asp-route-date="@pic.Date" title="@pic.Title">
+            @if (pic.MediaType == "video")
+            {
+                <div class="grid-thumb video-thumb">▶ Video</div>
+            }
+            else
+            {
+                <img src="@pic.Url" alt="@pic.Title" loading="lazy" />
+            }
+            <div class="grid-meta">
+                <span class="grid-title">@pic.Title</span>
+                <span class="grid-date">@pic.Date</span>
+            </div>
+        </a>
+    }
+</div>

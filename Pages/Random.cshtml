@@ -1,0 +1,44 @@
+@*
+    STEP 7 — Random gallery. Click "Surprise me" to fetch a fresh
+    set; ?count=N controls how many pictures show up (max 20).
+*@
+@page
+@model RandomModel
+@{
+    ViewData["Title"] = "Random";
+}
+
+<section class="hero">
+    <h1>Random APOD Gallery</h1>
+    <form method="get" class="date-form">
+        <label for="count">How many?</label>
+        <input type="number" id="count" name="count"
+               min="1" max="20" value="@Model.Count" />
+        <button type="submit" class="btn-primary">Surprise me</button>
+    </form>
+</section>
+
+@if (Model.ErrorMessage is not null)
+{
+    <div class="alert alert-error">@Model.ErrorMessage</div>
+}
+
+<div class="grid">
+    @foreach (var pic in Model.Pictures)
+    {
+        <a class="grid-item" asp-page="/Index" asp-route-date="@pic.Date" title="@pic.Title">
+            @if (pic.MediaType == "video")
+            {
+                <div class="grid-thumb video-thumb">▶ Video</div>
+            }
+            else
+            {
+                <img src="@pic.Url" alt="@pic.Title" loading="lazy" />
+            }
+            <div class="grid-meta">
+                <span class="grid-title">@pic.Title</span>
+                <span class="grid-date">@pic.Date</span>
+            </div>
+        </a>
+    }
+</div>

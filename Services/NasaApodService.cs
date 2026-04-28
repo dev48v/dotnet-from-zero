@@ -55,7 +55,7 @@ public class NasaApodService : INasaApodService
         var result = await _http.GetFromJsonAsync<List<ApodPicture>>(
             $"planetary/apod?api_key={_apiKey}&count={count}", ct);
 
-        return result ?? Array.Empty<ApodPicture>();
+        return (IReadOnlyList<ApodPicture>?)result ?? Array.Empty<ApodPicture>();
     }
 
     public async Task<IReadOnlyList<ApodPicture>> GetRangeAsync(DateOnly start, DateOnly end, CancellationToken ct)
@@ -70,6 +70,6 @@ public class NasaApodService : INasaApodService
             _apiKey, start, end);
 
         var result = await _http.GetFromJsonAsync<List<ApodPicture>>(url, ct);
-        return result ?? Array.Empty<ApodPicture>();
+        return (IReadOnlyList<ApodPicture>?)result ?? Array.Empty<ApodPicture>();
     }
 }

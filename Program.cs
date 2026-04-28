@@ -3,6 +3,7 @@
 // STEP 3 — Register HttpClient + NasaApodService for DI.
 // STEP 4 — Map /api/apod/* minimal-API endpoints.
 // STEP 5 — Add EF Core SQLite + apply schema on startup.
+// STEP 6 — Map /api/favourites/* CRUD endpoints.
 // ================================================================
 using Microsoft.EntityFrameworkCore;
 using SpaceExplorer.Api;
@@ -58,5 +59,6 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapApodEndpoints();
+app.MapFavouriteEndpoints();
 
 app.Run();

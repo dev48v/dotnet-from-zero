@@ -4,6 +4,22 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>SpaceExplorer</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- EF Core 8 + SQLite provider. The `.Sqlite` package brings
+         in the relational provider; `.Design` enables the
+         `dotnet ef` tooling but is only needed at design time. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <!-- Swashbuckle = Swagger UI for ASP.NET Core. Auto-generates
+         /swagger from minimal-API metadata, no code required. -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
 
 </Project>

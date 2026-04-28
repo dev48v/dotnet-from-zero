@@ -1,7 +1,9 @@
 // ================================================================
 // STEP 1 — Project entry point.
 // STEP 3 — Register HttpClient + NasaApodService for DI.
+// STEP 4 — Map /api/apod/* minimal-API endpoints.
 // ================================================================
+using SpaceExplorer.Api;
 using SpaceExplorer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,5 +35,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
+app.MapApodEndpoints();
 
 app.Run();

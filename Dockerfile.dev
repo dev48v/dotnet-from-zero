@@ -1,0 +1,20 @@
+# ================================================================
+# STEP 2 — Development Dockerfile.
+# Uses the full SDK image so we get `dotnet watch` for hot reload.
+# Source is bind-mounted from the host (see docker-compose.yml),
+# so editing a .cs or .cshtml file on the host instantly triggers
+# a rebuild inside the container.
+# ================================================================
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+WORKDIR /app
+
+# `dotnet watch` polls the file system. On Windows host -> Linux
+# container bind mounts, native file events don't propagate, so we
+# enable polling explicitly.
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Development
+EXPOSE 8080
+
+# No COPY here — the host directory is mounted at /app at runtime.
+CMD ["dotnet", "watch", "run", "--no-launch-profile", "--urls", "http://+:8080"]

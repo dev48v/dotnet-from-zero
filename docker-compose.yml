@@ -1,0 +1,43 @@
+# ================================================================
+# STEP 2 — Compose file with two profiles.
+#   `docker compose --profile dev up`  → hot-reload (Dockerfile.dev)
+#   `docker compose --profile prod up` → published build (Dockerfile)
+# Both expose the app on http://localhost:8080.
+# ================================================================
+services:
+  # --------------------------------------------------------------
+  # Development: source bind-mounted, `dotnet watch` rebuilds on
+  # every file save. Anonymous volumes for bin/ and obj/ stop the
+  # Linux container from clobbering Windows host build artifacts.
+  # --------------------------------------------------------------
+  app-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: dotnet-from-zero-dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/bin
+      - /app/obj
+    environment:
+      # Pulled from .env at the repo root (see .env.example).
+      # DEMO_KEY works without sign-up but is heavily rate limited;
+      # grab a free key from https://api.nasa.gov/.
+      - NASA_API_KEY=${NASA_API_KEY:-DEMO_KEY}
+
+  # --------------------------------------------------------------
+  # Production-like: published build, no source mounted, no watch.
+  # --------------------------------------------------------------
+  app-prod:
+    profiles: ["prod"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dotnet-from-zero-prod
+    ports:
+      - "8080:8080"
+    environment:
+      - NASA_API_KEY=${NASA_API_KEY:-DEMO_KEY}

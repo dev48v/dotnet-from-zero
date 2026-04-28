@@ -1,0 +1,10 @@
+# Keep the build context tiny: never ship local builds, IDE caches,
+# or the runtime SQLite database into the Docker image.
+bin/
+obj/
+.vs/
+.vscode/
+.git/
+*.db
+*.db-journal
+.env

@@ -13,6 +13,11 @@ using SpaceExplorer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Honour the PORT env var that hosting platforms (Render, Fly,
+// Heroku) inject. Falls back to 8080 for local Docker.
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://+:{port}");
+
 builder.Services.AddRazorPages();
 
 // Swagger + OpenAPI metadata. AddEndpointsApiExplorer is what
@@ -41,7 +46,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddHttpClient<INasaApodService, NasaApodService>(client =>
 {
     client.BaseAddress = new Uri("https://api.nasa.gov/");
-    client.Timeout = TimeSpan.FromSeconds(15);
+    client.Timeout = TimeSpan.FromSeconds(30);
     client.DefaultRequestHeaders.UserAgent.ParseAdd("dotnet-from-zero/1.0");
 });
 

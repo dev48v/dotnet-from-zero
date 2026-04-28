@@ -1,0 +1,19 @@
+# ================================================================
+# Render Blueprint — deploy this service for free with one click
+# at https://dashboard.render.com/blueprints. The runtime reads
+# the Dockerfile in this repo, so no .NET install on Render.
+# ================================================================
+services:
+  - type: web
+    name: dotnet-from-zero
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /
+    envVars:
+      - key: NASA_API_KEY
+        value: DEMO_KEY
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production

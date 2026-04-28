@@ -29,7 +29,6 @@ WORKDIR /app
 # Kestrel listens on port 8080 inside the container. We map it to
 # the host port in docker-compose.yml so we don't need root to
 # bind to 80, and so we can run multiple apps side-by-side.
-ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 EXPOSE 8080
 

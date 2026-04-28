@@ -27,7 +27,7 @@ public class RandomModel : PageModel
         {
             Pictures = await _nasa.GetRandomAsync(Count, ct);
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
             ErrorMessage = $"Could not reach NASA: {ex.Message}";
         }

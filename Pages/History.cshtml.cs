@@ -46,7 +46,7 @@ public class HistoryModel : PageModel
                 .OrderByDescending(p => p.Date)
                 .ToList();
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
             ErrorMessage = $"Could not reach NASA: {ex.Message}";
         }

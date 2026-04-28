@@ -45,11 +45,12 @@ public class IndexModel : PageModel
             // already be in its "saved" state.
             AlreadySaved = await IsSavedAsync(Picture.Date, ct);
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
-            // NASA's DEMO_KEY rate-limit is the most common
-            // failure path. Surfacing the message inline beats a
-            // 500 page for a learning project.
+            // NASA rate-limits, slow networks, and DEMO_KEY caps
+            // all show up as either HttpRequestException or
+            // TaskCanceledException (timeout). Surface inline
+            // instead of a 500.
             ErrorMessage = $"Could not reach NASA: {ex.Message}";
         }
     }

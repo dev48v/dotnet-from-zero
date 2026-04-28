@@ -4,6 +4,9 @@ Day 23 - Microsoft's web framework, in a Docker container, talking to NASA.
 🚀TechFromZero Series - DotNetFromZero
 
 
+🌐 Try it live: https://dotnet-from-zero.onrender.com
+
+
 This isn't a Hello World. It's a real space explorer:
 📐 Razor Pages → Minimal API → NASA APOD → EF Core → SQLite
 

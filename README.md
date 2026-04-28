@@ -3,6 +3,8 @@
 Day 23 of the **TechFromZero** series.
 A working **C# / .NET 8** web app that browses NASA's *Astronomy Picture of the Day* and saves favourites to a local SQLite database. Built from scratch with **Razor Pages** for the UI and **Minimal APIs + EF Core** for the back end. Docker-only — no `dotnet` install required on your host.
 
+> **Live:** https://dotnet-from-zero.onrender.com (Render free tier — first request after 15 min idle takes ~30s to wake up).
+
 > Companion repos: [react-from-zero](https://github.com/dev48v/react-from-zero), [nodejs-from-zero](https://github.com/dev48v/nodejs-from-zero), [django-from-zero](https://github.com/dev48v/django-from-zero), [laravel-from-zero](https://github.com/dev48v/laravel-from-zero), [vue-from-zero](https://github.com/dev48v/vue-from-zero)
 
 ---

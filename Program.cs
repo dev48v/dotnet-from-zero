@@ -19,6 +19,7 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://+:{port}");
 
 builder.Services.AddRazorPages();
+builder.Services.AddMemoryCache();
 
 // Swagger + OpenAPI metadata. AddEndpointsApiExplorer is what
 // makes minimal-API endpoints discoverable; AddSwaggerGen turns

@@ -11,6 +11,19 @@ using SpaceExplorer.Services;
 
 namespace SpaceExplorer.Api;
 
+internal static class ApodErrorMapping
+{
+    // NASA's DEMO_KEY rate-limits at 30/hour per IP. On shared
+    // platform IPs (Render free tier, etc.) we burn through it
+    // fast. Map upstream failures to a 503 with a clear message
+    // instead of letting the exception bubble to a 500 page.
+    public static IResult ToProblem(Exception ex) =>
+        Results.Problem(
+            title: "NASA APOD upstream error",
+            detail: ex.Message,
+            statusCode: StatusCodes.Status503ServiceUnavailable);
+}
+
 public static class ApodEndpoints
 {
     public static IEndpointRouteBuilder MapApodEndpoints(this IEndpointRouteBuilder routes)
@@ -35,8 +48,15 @@ public static class ApodEndpoints
                 parsed = d;
             }
 
-            var picture = await nasa.GetByDateAsync(parsed, ct);
-            return Results.Ok(picture);
+            try
+            {
+                var picture = await nasa.GetByDateAsync(parsed, ct);
+                return Results.Ok(picture);
+            }
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+            {
+                return ApodErrorMapping.ToProblem(ex);
+            }
         })
         .WithName("GetApodByDate")
         .Produces<ApodPicture>();
@@ -49,8 +69,15 @@ public static class ApodEndpoints
         {
             // Default 5 keeps DEMO_KEY happy while still feeling
             // useful. The service clamps to 1..20 either way.
-            var pictures = await nasa.GetRandomAsync(count ?? 5, ct);
-            return Results.Ok(pictures);
+            try
+            {
+                var pictures = await nasa.GetRandomAsync(count ?? 5, ct);
+                return Results.Ok(pictures);
+            }
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+            {
+                return ApodErrorMapping.ToProblem(ex);
+            }
         })
         .WithName("GetApodRandom")
         .Produces<IReadOnlyList<ApodPicture>>();
@@ -73,8 +100,15 @@ public static class ApodEndpoints
             if ((endDate.DayNumber - startDate.DayNumber) > 30)
                 return Results.BadRequest(new { error = "range may not exceed 30 days" });
 
-            var pictures = await nasa.GetRangeAsync(startDate, endDate, ct);
-            return Results.Ok(pictures);
+            try
+            {
+                var pictures = await nasa.GetRangeAsync(startDate, endDate, ct);
+                return Results.Ok(pictures);
+            }
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+            {
+                return ApodErrorMapping.ToProblem(ex);
+            }
         })
         .WithName("GetApodRange")
         .Produces<IReadOnlyList<ApodPicture>>();
